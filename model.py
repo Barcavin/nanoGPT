@@ -139,7 +139,8 @@ class Block(nn.Module):
         self.attn = CausalSelfAttention(config)
 
     def forward(self, x):
-        return self.attn(x)
+        x = self.attn(x) + x
+        return x
 
 @dataclass
 class GPTConfig:
