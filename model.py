@@ -139,7 +139,7 @@ class Block(nn.Module):
         self.attn = NonParamSelfAttention(config)
 
     def forward(self, x):
-        x = (x + self.attn(x))/2
+        x = self.attn(x)
         return x
 
 @dataclass
