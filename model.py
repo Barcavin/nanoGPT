@@ -136,7 +136,7 @@ class Block(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        self.attn = CausalSelfAttention(config)
+        self.attn = NonParamSelfAttention(config)
 
     def forward(self, x):
         x = (x + self.attn(x))/2
