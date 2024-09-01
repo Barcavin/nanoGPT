@@ -35,6 +35,10 @@ class CausalSelfAttention(nn.Module):
         self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd, bias=config.bias)
         # output projection
         self.c_proj = nn.Linear(config.n_embd, config.n_embd, bias=config.bias)
+        
+        # Set the layer as non-trainable
+        for param in list(self.c_proj.parameters()) + list(self.c_attn.parameters()):
+            param.requires_grad = False
         # regularization
         self.attn_dropout = nn.Dropout(config.dropout)
         self.resid_dropout = nn.Dropout(config.dropout)
