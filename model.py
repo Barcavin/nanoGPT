@@ -33,11 +33,9 @@ class CausalSelfAttention(nn.Module):
         assert config.n_embd % config.n_head == 0
         # key, query, value projections for all heads, but in a batch
         self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd, bias=config.bias)
-        # output projection
-        self.c_proj = nn.Linear(config.n_embd, config.n_embd, bias=config.bias)
         
         # Set the layer as non-trainable
-        for param in list(self.c_proj.parameters()) + list(self.c_attn.parameters()):
+        for param in list(self.c_attn.parameters()):
             param.requires_grad = False
         # regularization
         self.attn_dropout = nn.Dropout(config.dropout)
@@ -76,7 +74,7 @@ class CausalSelfAttention(nn.Module):
         y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
 
         # output projection
-        y = self.resid_dropout(self.c_proj(y))
+        y = y
         return y
 
 class NonParamSelfAttention(nn.Module):
