@@ -136,10 +136,18 @@ class Block(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        self.attn = CausalSelfAttention(config)
+        if config.pure_attn:
+            self.attn = NonParamSelfAttention(config)
+            self.residual = False
+        else:
+            self.attn = CausalSelfAttention(config)
+            self.residual = True
 
     def forward(self, x):
-        x = self.attn(x) + x
+        if self.residual:
+            x = self.attn(x) + x
+        else:
+            x = self.attn(x)
         return x
 
 @dataclass
@@ -151,6 +159,7 @@ class GPTConfig:
     n_embd: int = 768
     dropout: float = 0.0
     bias: bool = True # True: bias in Linears and LayerNorms, like GPT-2. False: a bit better and faster
+    pure_attn: bool = False
 
 class GPT(nn.Module):
 
