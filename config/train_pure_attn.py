@@ -1,5 +1,5 @@
 # Model
-n_emb = 768
+n_emb = 768 * 12
 pure_attn = True
 
 wandb_log = False
